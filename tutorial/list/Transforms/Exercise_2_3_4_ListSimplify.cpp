@@ -66,7 +66,16 @@ struct PeelFromElements : OpRewritePattern<FromElementsOp> {
 
   LogicalResult matchAndRewrite(FromElementsOp op,
                                 PatternRewriter &rewriter) const override {
-    return rewriter.notifyMatchFailure(op, "exercise 2 not implemented");
+    // Separate the last item.
+    ValueRange all = op.getElements();
+    Value last = all[all.size() - 1];
+    ValueRange others = all.drop_back();
+
+    FromElementsOp shorterOp = FromElementsOp::create(rewriter, op.getLoc(), op.getResult().getType(), others);
+    PushBackOp pushBackOp = PushBackOp::create(rewriter, op.getLoc(), op.getResult().getType(), shorterOp.getResult(), last);
+
+    rewriter.replaceOp(op, pushBackOp.getResult());
+    return success();
   }
 };
 
