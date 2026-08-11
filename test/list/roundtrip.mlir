@@ -43,3 +43,13 @@ func.func @is_empty(%list: !list.list<i32>) -> i1 {
 // CHECK-LABEL: func.func @is_empty
 // CHECK: %[[IS_EMPTY:.*]] = list.is_empty %{{.*}} : !list.list<i32> -> i1
 // CHECK: return %[[IS_EMPTY]] : i1
+
+// -----
+
+func.func @print(%list: !list.list<i32>) {
+  list.print %list : !list.list<i32>
+  return
+}
+
+// CHECK-LABEL: func.func @print
+// CHECK: list.print %{{.*}} : !list.list<i32>

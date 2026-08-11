@@ -118,4 +118,22 @@ def List_IsEmptyOp : List_Op<"is_empty"> {
   ];
 }
 
+def List_PrintOp : List_Op<"print"> {
+  let summary = "print a list";
+  let description = [{
+    Prints the elements of the operand list.
+
+    Example:
+
+    ```mlir
+    list.print %li : !list.list<i32> -> ()
+    ```
+  }];
+
+  let arguments = (ins List_ListType:$input);
+
+  let assemblyFormat =
+      "$input attr-dict `:` qualified(type($input))";
+}
+
 #endif // MLIR_DIALECT_LIST_IR_LISTOPS
