@@ -53,3 +53,14 @@ func.func @print(%list: !list.list<i32>) {
 
 // CHECK-LABEL: func.func @print
 // CHECK: list.print %{{.*}} : !list.list<i32>
+
+// -----
+
+func.func @range(%lower: i32, %upper: i32) -> !list.list<i32> {
+  %list = list.range %lower to %upper : !list.list<i32>
+  return %list : !list.list<i32>
+}
+
+// CHECK-LABEL: func.func @range
+// CHECK: %[[LIST:.*]] = list.range %{{.*}} to %{{.*}} : !list.list<i32>
+// CHECK: return %[[LIST]] : !list.list<i32>

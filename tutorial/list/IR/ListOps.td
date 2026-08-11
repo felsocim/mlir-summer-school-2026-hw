@@ -136,4 +136,23 @@ def List_PrintOp : List_Op<"print"> {
       "$input attr-dict `:` qualified(type($input))";
 }
 
+def List_RangeOp : List_Op<"range"> {
+  let summary = "number of elements of a list";
+  let description = [{
+    Creates a list that holds integers from a specific range.
+
+    Example:
+
+    ```mlir
+    %list = list.range %lower to %upper : !list.list<i32>
+    ```
+  }];
+
+  let arguments = (ins I32:$lower, I32:$upper);
+  let results = (outs List_ListType:$result);
+
+  let assemblyFormat =
+      "$lower `to` $upper attr-dict `:` qualified(type($result))";
+}
+
 #endif // MLIR_DIALECT_LIST_IR_LISTOPS
