@@ -93,4 +93,29 @@ def List_PushBackOp : List_Op<"push_back",
   ];
 }
 
+def List_IsEmptyOp : List_Op<"is_empty"> {
+  let summary = "check emptiness of a list";
+  let description = [{
+    Checks whether the operand list is empty.
+
+    Example:
+
+    ```mlir
+    %res = list.is_empty %li : !list.list<i32> -> i1
+    ```
+  }];
+
+  let arguments = (ins List_ListType:$input);
+  let results = (outs I1:$result);
+
+  let assemblyFormat =
+      "$input attr-dict `:` qualified(type($input)) `->` type($result)";
+
+  let builders = [
+    OpBuilder<(ins "::mlir::Value":$input), [{
+      build($_builder, $_state, $_builder.getI32Type(), input);
+    }]>
+  ];
+}
+
 #endif // MLIR_DIALECT_LIST_IR_LISTOPS

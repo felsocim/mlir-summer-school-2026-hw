@@ -32,3 +32,14 @@ func.func @length(%list: !list.list<i32>) -> i32 {
 // CHECK-LABEL: func.func @length
 // CHECK: %[[LENGTH:.*]] = list.length %{{.*}} : !list.list<i32> -> i32
 // CHECK: return %[[LENGTH]] : i32
+
+// -----
+
+func.func @is_empty(%list: !list.list<i32>) -> i1 {
+  %empty = list.is_empty %list : !list.list<i32> -> i1
+  return %empty : i1
+}
+
+// CHECK-LABEL: func.func @is_empty
+// CHECK: %[[IS_EMPTY:.*]] = list.is_empty %{{.*}} : !list.list<i32> -> i1
+// CHECK: return %[[IS_EMPTY]] : i1
