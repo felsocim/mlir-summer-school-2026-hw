@@ -155,4 +155,29 @@ def List_RangeOp : List_Op<"range"> {
       "$lower `to` $upper attr-dict `:` qualified(type($result))";
 }
 
+def List_ReverseOp : List_Op<"reverse",[AllTypesMatch<["input", "result"]>]> {
+  let summary = "reverse order of elements in a list";
+  let description = [{
+    Reverse the elements of the operand list.
+
+    Example:
+
+    ```mlir
+    %list = list.reverse %li : !list.list<i32>
+    ```
+  }];
+
+  let arguments = (ins List_ListType:$input);
+  let results = (outs List_ListType:$result);
+
+  let assemblyFormat =
+      "$input attr-dict `:` qualified(type($input))";
+
+  let builders = [
+    OpBuilder<(ins "::mlir::Value":$input), [{
+      build($_builder, $_state, input.getType(), input);
+    }]>
+  ];
+}
+
 #endif // MLIR_DIALECT_LIST_IR_LISTOPS

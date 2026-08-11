@@ -64,3 +64,14 @@ func.func @range(%lower: i32, %upper: i32) -> !list.list<i32> {
 // CHECK-LABEL: func.func @range
 // CHECK: %[[LIST:.*]] = list.range %{{.*}} to %{{.*}} : !list.list<i32>
 // CHECK: return %[[LIST]] : !list.list<i32>
+
+// -----
+
+func.func @reverse(%list: !list.list<i32>) -> !list.list<i32> {
+  %reversed = list.reverse %list : !list.list<i32>
+  return %reversed : !list.list<i32>
+}
+
+// CHECK-LABEL: func.func @reverse
+// CHECK: %[[REVERSED:.*]] = list.reverse %{{.*}} : !list.list<i32>
+// CHECK: return %[[REVERSED]] : !list.list<i32>
