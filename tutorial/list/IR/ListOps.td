@@ -80,7 +80,7 @@ def List_EmptyOp : List_Op<"empty",
 }
 
 def List_FromElementsOp : List_Op<"from_elements",
-    [Pure, List_ItemTypesMatchElementType<"result", "elements">]> {
+    [Pure, List_ItemTypesMatchElementType<"result", "elements">, DeclareOpInterfaceMethods<ListLengthOpInterface>]> {
   // TODO: Attach ListLengthOpInterface.
   let summary = "list holding the given elements";
   let description = [{
@@ -183,7 +183,7 @@ def List_LengthOp : List_Op<"length", [Pure]> {
 
 def List_MapOp : List_Op<"map",
     [RecursiveMemoryEffects,
-     SingleBlockImplicitTerminator<"::mlir::list::YieldOp">]> {
+     SingleBlockImplicitTerminator<"::mlir::list::YieldOp">, DeclareOpInterfaceMethods<ListLengthOpInterface>]> {
   // TODO: Attach ListLengthOpInterface.
   let summary = "apply a computation to every element of a list";
   let description = [{
@@ -305,7 +305,7 @@ def List_PrintOp : List_Op<"print", [MemoryEffects<[MemWrite]>]> {
 
 def List_PushBackOp : List_Op<"push_back",
     [Pure, AllTypesMatch<["input", "result"]>,
-     List_ItemTypeMatchesElementType<"input", "item">]> {
+     List_ItemTypeMatchesElementType<"input", "item">, DeclareOpInterfaceMethods<ListLengthOpInterface>]> {
   // TODO: Attach ListLengthOpInterface.
   let summary = "list with an element appended";
   let description = [{
@@ -379,7 +379,7 @@ def List_RangeOp : List_Op<"range", [Pure]> {
 }
 
 def List_ReverseOp : List_Op<"reverse",
-    [Pure, AllTypesMatch<["input", "result"]>]> {
+    [Pure, AllTypesMatch<["input", "result"]>, DeclareOpInterfaceMethods<ListLengthOpInterface>]> {
   // TODO: Attach ListLengthOpInterface.
   let summary = "list with its elements in reverse order";
   let description = [{

@@ -40,7 +40,12 @@ OpFoldResult LengthOp::fold(FoldAdaptor adaptor) {
   // TODO: Query the input's defining operation through
   // ListLengthOpInterface. If it reports a length, return an IntegerAttr of
   // the result type. A block argument or unknown length must not be folded.
-  return {};
+  Value input = getInput();
+  auto operation = input.getDefiningOp<ListLengthOpInterface>();
+  if (operation && operation.getStaticLength().has_value()) {
+    return IntegerAttr::get(IntegerType::get(operation.getContext(), 32), operation.getStaticLength().value());
+  }
+  return nullptr;
 }
 
 // TODO: Implement getStaticLength() for FromElementsOp, MapOp, PushBackOp and
@@ -54,6 +59,38 @@ OpFoldResult LengthOp::fold(FoldAdaptor adaptor) {
 //===----------------------------------------------------------------------===//
 // MapOp
 //===----------------------------------------------------------------------===//
+
+std::optional<int64_t> FromElementsOp::getStaticLength() {
+  return getElements().size();
+}
+
+std::optional<int64_t> MapOp::getStaticLength() {
+  Value input = getInput();
+  auto operation = input.getDefiningOp<ListLengthOpInterface>();
+  if (operation) {
+    return operation.getStaticLength();
+  }
+  return std::nullopt;
+}
+
+std::optional<int64_t> ReverseOp::getStaticLength() {
+  Value input = getInput();
+  auto operation = input.getDefiningOp<ListLengthOpInterface>();
+  if (operation) {
+    return operation.getStaticLength();
+  }
+  return std::nullopt;
+}
+
+std::optional<int64_t> PushBackOp::getStaticLength() {
+  Value input = getInput();
+  auto operation = input.getDefiningOp<ListLengthOpInterface>();
+  if (operation) {
+    int64_t length = operation.getStaticLength().value() + 1;
+    return std::optional<int64_t>(length);
+  }
+  return std::nullopt;
+}
 
 void MapOp::build(OpBuilder &builder, OperationState &state, Value input,
                   IntegerType resultElementType) {
