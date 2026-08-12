@@ -356,7 +356,7 @@ def List_PushFrontOp : List_Op<"push_front",
   ];
 }
 
-def List_RangeOp : List_Op<"range", [Pure]> {
+def List_RangeOp : List_Op<"range", [Pure, DeclareOpInterfaceMethods<ListLengthOpInterface>]> {
   // Exercise 2 TODO: Attach ListLengthOpInterface.
   let summary = "list of consecutive integers";
   let description = [{
