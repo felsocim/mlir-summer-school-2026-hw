@@ -42,22 +42,22 @@ module attributes {transform.with_named_sequence} {
       %arg0: !transform.any_op {transform.readonly}) {
 
     // 1. Match the root.
-    ???
+    %h = transform.structured.match attributes {__root__} in %arg0 : (!transform.any_op) -> !transform.any_op
 
     // 2. Match the producers.
-    ???
+    %producers = transform.structured.match attributes {__producer__} in %arg0 : (!transform.any_op) -> !transform.any_op
 
     // 3. Tile the root with [8, 16].
-    ???
+    %tiled, %loops:2 = transform.structured.tile_using_for %h tile_sizes [8, 16] : (!transform.any_op) -> (!transform.any_op, !transform.any_op, !transform.any_op)
 
     // 4. Fuse the producers into the loop nest.
-    ???
+    %fused, %new_containing = transform.structured.fuse_into_containing_op %producers into %loops : (!transform.any_op, !transform.any_op) -> (!transform.any_op, !transform.any_op)
 
     // 5. Optional: once exercise 3 works, print the payload here.
-    // transform.tutorial.print_handle %???, "after fusion" : !transform.any_op
+    transform.tutorial.print_handle %fused, "after fusion" : !transform.any_op
 
     // 6. Tile the root again with [4, 4].
-    ???
+    %tiled2, %loops2:2 = transform.structured.tile_using_for %tiled tile_sizes [4, 4] : (!transform.any_op) -> (!transform.any_op, !transform.any_op, !transform.any_op)
 
     transform.yield
   }
