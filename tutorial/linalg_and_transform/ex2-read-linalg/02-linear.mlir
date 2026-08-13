@@ -35,11 +35,11 @@ func.func @linear(%A: tensor<?x?x?xf32>, %B: tensor<?x?xf32>,
 }
 
 // CHECK-LABEL: func.func @linear
-// CHECK:         scf.parallel (???) =
-// CHECK:           scf.for ??? =
-// CHECK:             memref.load %{{.*}}[???]
-// CHECK:             memref.load %{{.*}}[???]
-// CHECK:             memref.load %{{.*}}[???]
+// CHECK:         scf.parallel (%[[B:[a-zA-Z0-9_]+]], %[[I:[a-zA-Z0-9_]+]], %[[J:[a-zA-Z0-9_]+]]) =
+// CHECK:           scf.for %[[K:[a-zA-Z0-9_]+]] =
+// CHECK:             memref.load %{{.*}}[%[[B]], %[[I]], %[[K]]]
+// CHECK:             memref.load %{{.*}}[%[[J]], %[[K]]]
+// CHECK:             memref.load %{{.*}}[%[[B]], %[[I]], %[[J]]]
 // CHECK:             arith.mulf
 // CHECK:             arith.addf
-// CHECK:             memref.store %{{.*}}, %{{.*}}[???]
+// CHECK:             memref.store %{{.*}}, %{{.*}}[%[[B]], %[[I]], %[[J]]]
