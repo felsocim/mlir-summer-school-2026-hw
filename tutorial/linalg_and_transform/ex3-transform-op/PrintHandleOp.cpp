@@ -59,7 +59,13 @@ DiagnosedSilenceableFailure transform::PrintHandleOp::apply(
   //                            whole interpreter run
   //===--------------------------------------------------------------------===//
 
-  return emitDefiniteFailure()
-         << "transform.tutorial.print_handle is not implemented yet - see "
-            "tutorial/linalg_and_transform/ex3-transform-op/PrintHandleOp.cpp";
+  SmallVector<Operation *> payload = llvm::to_vector(state.getPayloadOps(getTarget()));
+
+  int i = 0;
+  for (auto op : payload) {
+    op->emitRemark() << getMessage() << " (" << i + 1 << " of " << payload.size() << "): " << op->getName();
+    i++;
+  }
+
+  return DiagnosedSilenceableFailure::success();
 }
