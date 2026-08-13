@@ -23,15 +23,21 @@
 // explicit `indexing_maps = [...]` attribute, which will not match the CHECK.
 //===----------------------------------------------------------------------===//
 
+#mapA = affine_map<(d0, d1, d2) -> (d0, d2)>
+#mapB = affine_map<(d0, d1, d2) -> (d2, d1)>
+#mapC = affine_map<(d0, d1, d2) -> (d0, d1)>
+
 func.func @matmul(%A: tensor<?x?xf32>, %B: tensor<?x?xf32>,
                   %C: tensor<?x?xf32>) -> tensor<?x?xf32> {
   %0 = linalg.generic {
-    indexing_maps = [???],
-    iterator_types = [???]
-  } ins(??? : tensor<?x?xf32>, tensor<?x?xf32>)
-    outs(??? : tensor<?x?xf32>) {
-  ^bb0(???):
-    ???
+    indexing_maps = [#mapA, #mapB, #mapC],
+    iterator_types = ["parallel", "parallel", "reduction"]
+  } ins(%A, %B : tensor<?x?xf32>, tensor<?x?xf32>)
+    outs(%C : tensor<?x?xf32>) {
+  ^bb0(%in_A: f32, %in_B: f32, %out_C: f32):
+    %1 = arith.mulf %in_A, %in_B : f32
+    %2 = arith.addf %1, %out_C : f32
+    linalg.yield %2 : f32
   } -> tensor<?x?xf32>
   return %0 : tensor<?x?xf32>
 }
