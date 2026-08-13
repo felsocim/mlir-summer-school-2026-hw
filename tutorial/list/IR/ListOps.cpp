@@ -48,31 +48,17 @@ void FromElementsOp::inferResultRanges(ArrayRef<ConstantIntRanges> argRanges,
 
 void PeekFrontOp::inferResultRanges(ArrayRef<ConstantIntRanges> argRanges,
                                     SetIntRangeFn setResultRanges) {
-  // EXERCISE 1: Change this line
-  ConstantIntRanges range = ConstantIntRanges::maxRange(
-      ConstantIntRanges::getStorageBitwidth(getResult().getType()));
-
-  setResultRanges(getItem(), range);
+  setResultRanges(getItem(), argRanges[0]);
 }
 
 void PopFrontOp::inferResultRanges(ArrayRef<ConstantIntRanges> argRanges,
                                    SetIntRangeFn setResultRanges) {
-  // EXERCISE 1: Change this line
-  ConstantIntRanges range = ConstantIntRanges::maxRange(
-      ConstantIntRanges::getStorageBitwidth(
-          getResult().getType().getElementType()));
-
-  setResultRanges(getResult(), range);
+  setResultRanges(getResult(), argRanges[0]);
 }
 
 void PushFrontOp::inferResultRanges(ArrayRef<ConstantIntRanges> argRanges,
                                     SetIntRangeFn setResultRanges) {
-  // EXERCISE 1: Change this line
-  ConstantIntRanges range = ConstantIntRanges::maxRange(
-      ConstantIntRanges::getStorageBitwidth(
-          getResult().getType().getElementType()));
-
-  setResultRanges(getResult(), range);
+  setResultRanges(getResult(), argRanges[0].rangeUnion(argRanges[1]));
 }
 
 //===----------------------------------------------------------------------===//
@@ -81,7 +67,6 @@ void PushFrontOp::inferResultRanges(ArrayRef<ConstantIntRanges> argRanges,
 
 void LengthOp::inferResultRanges(ArrayRef<ConstantIntRanges>,
                                  SetIntRangeFn setResultRanges) {
-  // EXERCISE 1: Change this line
   ConstantIntRanges range = ConstantIntRanges::maxRange(
       ConstantIntRanges::getStorageBitwidth(getResult().getType()));
 
